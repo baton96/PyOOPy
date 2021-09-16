@@ -1,9 +1,9 @@
-from PyOOP import PyOOP
 from dataclasses import dataclass
+from PyOOP import PyOOP
 
 
 @dataclass
-class BaseFields(PyOOP):
+class Base(PyOOP):
     protected_field: PyOOP.Protected = 'success'
     private_field: PyOOP.Private = 'success'
     public_field: PyOOP.Public = 'success'
@@ -17,26 +17,14 @@ class BaseFields(PyOOP):
     def public_field_getter(self):
         return self.public_field
 
-    @PyOOP.protected
-    def protected_method(self):
-        return 'success'
 
-    @PyOOP.private
-    def private_method(self):
-        return 'success'
-
-    @PyOOP.public
-    def public_method(self):
-        return 'success'
-
-
-class IntermediateFields(BaseFields):
+class Intermediate(Base):
     pass
 
 
-class ChildFields(IntermediateFields):
+class Child(Intermediate):
     pass
 
 
-child_fields = ChildFields()
-base_fields = BaseFields()
+child = Child()
+base = Base()

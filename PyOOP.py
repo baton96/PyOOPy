@@ -55,7 +55,7 @@ class PyOOP:
             parent = self.__class__.__bases__[0]
             private_in_parent = False
             try:
-                private_in_parent = getattr(parent, name).__qualname__ == 'private.<locals>.wrapper'
+                private_in_parent = getattr(parent, name).__qualname__ == 'PyOOP.private.<locals>.wrapper'
             except AttributeError:
                 pass
             if private_in_parent:
