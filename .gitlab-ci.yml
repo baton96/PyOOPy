@@ -2,4 +2,8 @@ image: python:latest
 test:
   script:
     - pip install pytest
-    - pytest -rA tests.py
+    - pytest --junitxml=report.xml -rA tests.py
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
