@@ -9,7 +9,7 @@ setup(
     author='Bartosz Paulewicz',
     author_email='podolce0@gmail.com',
     url='https://gitlab.com/baton96/PyOOP',
-    download_url='https://gitlab.com/baton96/PyOOP/archive/v_01.tar.gz',
+    download_url='https://gitlab.com/baton96/PyOOP/-/archive/v0.1/PyOOP-v0.1.tar.gz',
     keywords=['OOP', 'Object-oriented programming'],
     classifiers=[
         'Development Status :: 3 - Alpha',
