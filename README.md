@@ -1,31 +1,29 @@
-# PyOOPy :poop:
+# PyOOP :poop:
 **P**ython **O**bject-**O**riented **P**rogramming library
 
 ## Installation
-```pip install PyOOPy```
+```pip install PyOOP```
 
 ## Usage
-
 ```python
 from dataclasses import dataclass
-from PyOOPy import PyOOPy
-
+from PyOOP import PyOOP
 
 @dataclass
-class Base(PyOOPy):
-    protected_field: PyOOPy.Protected = None
-    private_field: PyOOPy.Private = None
-    public_field: PyOOPy.Public = None
+class Base(PyOOP):
+    protected_field: PyOOP.Protected = None
+    private_field: PyOOP.Private = None
+    public_field: PyOOP.Public = None
 
-    @PyOOPy.protected
+    @PyOOP.protected
     def protected_method(self):
         pass
 
-    @PyOOPy.private
+    @PyOOP.private
     def private_method(self):
         pass
 
-    @PyOOPy.public
+    @PyOOP.public
     def public_method(self):
         pass
 ```
