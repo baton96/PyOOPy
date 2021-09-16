@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from PyOOP import PyOOP
+from PyOOPy import PyOOPy
 import pytest
 
 
 @dataclass
-class Base(PyOOP):
-    protected_field: PyOOP.Protected = 'success'
-    private_field: PyOOP.Private = 'success'
-    public_field: PyOOP.Public = 'success'
+class Base(PyOOPy):
+    protected_field: PyOOPy.Protected = 'success'
+    private_field: PyOOPy.Private = 'success'
+    public_field: PyOOPy.Public = 'success'
 
     def protected_field_getter(self):
         return self.protected_field
@@ -50,7 +50,7 @@ def test_child_protected():
 
 
 def test_child_private():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = child.private_field_getter()
 
 
@@ -60,12 +60,12 @@ def test_child_public():
 
 # Global
 def test_global_protected():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = base.protected_field
 
 
 def test_global_private():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = base.private_field
 
 

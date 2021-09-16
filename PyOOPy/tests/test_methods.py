@@ -1,19 +1,19 @@
 from dataclasses import dataclass
-from PyOOP import PyOOP
+from PyOOPy import PyOOPy
 import pytest
 
 
 @dataclass
-class Base(PyOOP):
-    @PyOOP.protected
+class Base(PyOOPy):
+    @PyOOPy.protected
     def protected_method(self):
         return 'success'
 
-    @PyOOP.private
+    @PyOOPy.private
     def private_method(self):
         return 'success'
 
-    @PyOOP.public
+    @PyOOPy.public
     def public_method(self):
         return 'success'
 
@@ -58,7 +58,7 @@ def test_child_protected():
 
 
 def test_child_private():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = child.private_method_getter()
 
 
@@ -68,12 +68,12 @@ def test_child_public():
 
 # Global
 def test_global_protected():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = base.protected_method()
 
 
 def test_global_private():
-    with pytest.raises(PyOOP.AccessError):
+    with pytest.raises(PyOOPy.AccessError):
         _ = base.private_method()
 
 
