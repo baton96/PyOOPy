@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Base(PyOOP):
+class BaseFields(PyOOP):
     protected_field: PyOOP.Protected = 'success'
     private_field: PyOOP.Private = 'success'
     public_field: PyOOP.Public = 'success'
@@ -19,7 +19,7 @@ class Base(PyOOP):
 
     @PyOOP.protected
     def protected_method(self):
-        return 'protected'
+        return 'success'
 
     @PyOOP.private
     def private_method(self):
@@ -27,16 +27,16 @@ class Base(PyOOP):
 
     @PyOOP.public
     def public_method(self):
-        return 'public'
+        return 'success'
 
 
-class Intermediate(Base):
+class IntermediateFields(BaseFields):
     pass
 
 
-class Child(Intermediate):
+class ChildFields(IntermediateFields):
     pass
 
 
-child = Child()
-base = Base()
+child_fields = ChildFields()
+base_fields = BaseFields()

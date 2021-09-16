@@ -2,7 +2,7 @@ image: python:latest
 test:
   script:
     - pip install pytest
-    - pytest --junitxml=report.xml -rA test_fields.py
+    - pytest --junitxml=report.xml -rA tests/*.py
   artifacts:
     when: always
     reports:
