@@ -8,8 +8,8 @@ setup(
     description='Object-oriented programming in Python',
     author='Bartosz Paulewicz',
     author_email='podolce0@gmail.com',
-    url='https://gitlab.com/baton96/PyOOPy',
-    download_url='https://gitlab.com/baton96/PyOOPy/-/archive/v0.1/PyOOPy-v0.1.tar.gz',
+    url='https://gitlab.com/baton96/PyOOP',
+    download_url='https://gitlab.com/baton96/PyOOP/-/archive/0.1.1/PyOOP-0.1.1.tar.gz',
     keywords=['OOP', 'Object-oriented programming'],
     classifiers=[
         'Development Status :: 3 - Alpha',
