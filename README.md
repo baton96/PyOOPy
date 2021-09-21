@@ -1,4 +1,4 @@
-# PyOOPy :poop:
+# 💩 PyOOPy 💩
 **P**ython **O**bject-**O**riented **P**rogramming library
 
 ## Installation
