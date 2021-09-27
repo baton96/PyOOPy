@@ -51,7 +51,12 @@ class Public:
     pass
 
 
+class Abstract:
+    pass
+
+
 class PyOOPy:
+    # Protected, Private, Public
     def __getattribute__(self, name):
         attribute = object.__getattribute__(self, name)
         caller = inspect.currentframe().f_back.f_locals.get('self')
@@ -60,7 +65,30 @@ class PyOOPy:
         if access in (Private, Protected) and caller is not self:
             raise access_error(name, self, access)
         for parent in parents(self):
+            if parent == PyOOPy:
+                continue
             access = access_check(parent(), name)
             if parent != object and access is Private:
                 raise access_error(name, self, access)
         return attribute
+
+    # Abstract
+    _abstract = True
+
+    def __init_subclass__(cls, *args, **kwargs):
+        init = cls.__init__.__qualname__
+        own_init = init.startswith(cls.__name__)
+        try:
+            return_type = cls.__init__.__annotations__.get('return')
+        except AttributeError:
+            return_type = None
+        is_abstract = (return_type == Abstract)
+        if own_init and is_abstract:
+            cls._abstract = True
+        else:
+            cls._abstract = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._abstract:
+            raise TypeError(f"Can't instantiate abstract class {cls.__name__}")
+        return super().__new__(cls, *args, **kwargs)

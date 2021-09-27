@@ -56,7 +56,7 @@ def test_child_protected():
 
 def test_child_private():
     with pytest.raises(AttributeError):
-        _ = child.private_method_getter()
+        child.private_method_getter()
 
 
 def test_child_public():
@@ -66,12 +66,12 @@ def test_child_public():
 # Global
 def test_global_protected():
     with pytest.raises(AttributeError):
-        _ = base.protected_method()
+        base.protected_method()
 
 
 def test_global_private():
     with pytest.raises(AttributeError):
-        _ = base.private_method()
+        base.private_method()
 
 
 def test_global_public():

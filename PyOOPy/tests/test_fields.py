@@ -51,7 +51,7 @@ def test_child_protected():
 
 def test_child_private():
     with pytest.raises(AttributeError):
-        _ = child.private_field_getter()
+        child.private_field_getter()
 
 
 def test_child_public():

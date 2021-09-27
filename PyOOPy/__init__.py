@@ -1,1 +1,1 @@
-from .PyOOPy import PyOOPy, Protected, Private, Public
+from .PyOOPy import *
