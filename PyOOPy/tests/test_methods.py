@@ -1,20 +1,17 @@
+from PyOOPy import PyOOPy, Protected, Private, Public
 from dataclasses import dataclass
-from PyOOPy import PyOOPy
 import pytest
 
 
 @dataclass
 class Base(PyOOPy):
-    @PyOOPy.protected
-    def protected_method(self):
+    def protected_method(self) -> Protected:
         return 'success'
 
-    @PyOOPy.private
-    def private_method(self):
+    def private_method(self) -> Private:
         return 'success'
 
-    @PyOOPy.public
-    def public_method(self):
+    def public_method(self) -> Public:
         return 'success'
 
     def protected_method_getter(self):

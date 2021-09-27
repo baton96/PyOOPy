@@ -1,13 +1,13 @@
+from PyOOPy import PyOOPy, Protected, Private, Public
 from dataclasses import dataclass
-from PyOOPy import PyOOPy
 import pytest
 
 
 @dataclass
 class Base(PyOOPy):
-    protected_field: PyOOPy.Protected = 'success'
-    private_field: PyOOPy.Private = 'success'
-    public_field: PyOOPy.Public = 'success'
+    protected_field: Protected = 'success'
+    private_field: Private = 'success'
+    public_field: Public = 'success'
 
     def protected_field_getter(self):
         return self.protected_field
