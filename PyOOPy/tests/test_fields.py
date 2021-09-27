@@ -50,7 +50,7 @@ def test_child_protected():
 
 
 def test_child_private():
-    with pytest.raises(PyOOPy.AccessError):
+    with pytest.raises(AttributeError):
         _ = child.private_field_getter()
 
 
@@ -60,12 +60,12 @@ def test_child_public():
 
 # Global
 def test_global_protected():
-    with pytest.raises(PyOOPy.AccessError):
+    with pytest.raises(AttributeError):
         _ = base.protected_field
 
 
 def test_global_private():
-    with pytest.raises(PyOOPy.AccessError):
+    with pytest.raises(AttributeError):
         _ = base.private_field
 
 
