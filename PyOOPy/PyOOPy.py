@@ -13,7 +13,7 @@ def method_access(obj, name):
 
 def field_access(obj, name):
     try:
-        init = obj.__init__
+        init = object.__getattribute__(obj, '__init__')
         annotations = init.__annotations__
         access = annotations.get(name)
         return access
@@ -22,7 +22,9 @@ def field_access(obj, name):
 
 
 def parents(obj):
-    return obj.__class__.__bases__
+    cls = object.__getattribute__(obj, '__class__')
+    bases = cls.__bases__
+    return bases
 
 
 class Protected:
@@ -45,9 +47,6 @@ class PyOOPy:
 
     def __getattribute__(self, name):
         attribute = object.__getattribute__(self, name)
-        if name[0] == '_':
-            return attribute
-
         caller = inspect.currentframe().f_back.f_locals.get('self')
         access_check = method_access if callable(attribute) else field_access
         access = access_check(self, name)
