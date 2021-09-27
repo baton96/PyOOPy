@@ -1,4 +1,4 @@
-import inspect
+import sys
 
 
 def method_access(obj, name):
@@ -55,11 +55,15 @@ class Abstract:
     pass
 
 
+class Final:
+    pass
+
+
 class PyOOPy:
     # Protected, Private, Public
     def __getattribute__(self, name):
         attribute = object.__getattribute__(self, name)
-        caller = inspect.currentframe().f_back.f_locals.get('self')
+        caller = sys._getframe().f_back.f_locals.get('self')
         access_check = method_access if callable(attribute) else field_access
         access = access_check(self, name)
         if access in (Private, Protected) and caller is not self:
@@ -75,7 +79,7 @@ class PyOOPy:
     # Abstract
     _abstract = True
 
-    def __init_subclass__(cls, *args, **kwargs):
+    def __init_subclass__(cls):
         init = cls.__init__.__qualname__
         own_init = init.startswith(cls.__name__)
         try:
@@ -88,7 +92,17 @@ class PyOOPy:
         else:
             cls._abstract = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls):
         if cls._abstract:
             raise TypeError(f"Can't instantiate abstract class {cls.__name__}")
-        return super().__new__(cls, *args, **kwargs)
+        return object.__new__(cls)
+
+    # Final
+    def __setattr__(self, attr, value):
+        is_final = self.__init__.__annotations__.get(attr) == Final
+        caller = sys._getframe().f_back.f_code.co_name
+        from_init = (caller == '__init__')
+        if is_final and not from_init:
+            msg = f"Attribute '{attr}' of object '{self.__class__.__name__}' is final"
+            raise AttributeError(msg)
+        object.__setattr__(self, attr, value)
