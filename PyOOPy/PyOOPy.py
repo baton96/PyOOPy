@@ -1,3 +1,4 @@
+from keywords import *
 import sys
 
 
@@ -37,26 +38,6 @@ def parents(obj):
 def access_error(name, cls, access):
     msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__name__.lower()}"
     return AttributeError(msg)
-
-
-class Protected:
-    pass
-
-
-class Private:
-    pass
-
-
-class Public:
-    pass
-
-
-class Abstract:
-    pass
-
-
-class Final:
-    pass
 
 
 class PyOOPy:
