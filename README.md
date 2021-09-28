@@ -5,30 +5,41 @@
 ```pip install PyOOPy```
 
 ## Usage
-
 ```python
-from dataclasses import dataclass
 from PyOOPy import PyOOPy
+```
+### Protected, Private & Public
+```python
+from PyOOPy import PyOOPy, Protected, Private, Public
 
+class Class(PyOOPy):
+    protected_field: Protected = 'protected_field'
+    private_field: Private = 'private_field'
+    public_field: Public = 'public_field'
 
-@dataclass
-class Base(PyOOPy):
-    protected_field: PyOOPy.Protected = None
-    private_field: PyOOPy.Private = None
-    public_field: PyOOPy.Public = None
+    def protected_method(self) -> Protected:
+        return 'protected_method'
 
-    @PyOOPy.protected
-    def protected_method(self):
-        pass
+    def private_method(self) -> Private:
+        return 'private_method'
 
-    @PyOOPy.private
-    def private_method(self):
-        pass
+    def public_method(self) -> Public:
+        return 'public_method'
+```
+### Final
+```python
+from PyOOPy import PyOOPy, Final
 
-    @PyOOPy.public
-    def public_method(self):
+class Class(PyOOPy):
+    final: Final = 'final'
+```
+### Abstract
+```python
+from PyOOPy import PyOOPy, Abstract
+
+class Class(PyOOPy):
+    def __init__(self) -> Abstract:
         pass
 ```
-
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
