@@ -85,14 +85,23 @@ class PyOOPy:
         return object.__new__(cls)
 
     # Final
-    def __setattr__(self, attr, value):
+    def __setattr__(self, name, value):
         caller = sys._getframe().f_back.f_code.co_name
         from_init = (caller == '__init__')
         if not from_init:
-            is_callable = callable(self.__getattribute__(attr))
-            access_check = method_access if is_callable else field_access
-            access = access_check(self, attr)
-            if access == Final:
-                msg = f"Attribute '{attr}' of object '{self.__class__.__name__}' is final"
-                raise AttributeError(msg)
-        object.__setattr__(self, attr, value)
+            if name in dir(self):
+                attribute = object.__getattribute__(self, name)
+                access_check = method_access if callable(attribute) else field_access
+                access = access_check(self, name)
+                if access == Final:
+                    msg = f"Attribute '{name}' of object '{self.__class__.__name__}' is final"
+                    raise AttributeError(msg)
+            else:
+                try:
+                    cls_access = self.__init__.__annotations__.get('return')
+                except AttributeError:
+                    cls_access = None
+                if name not in self.__dict__ and cls_access == Final:
+                    msg = f"Class '{self.__class__.__name__}' is final"
+                    raise TypeError(msg)
+        object.__setattr__(self, name, value)

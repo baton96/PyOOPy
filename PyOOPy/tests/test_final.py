@@ -23,9 +23,21 @@ class C(PyOOPy):
         pass
 
 
+class D(PyOOPy):
+    final = 0
+
+    def __init__(self) -> Final:
+        pass
+
+
 @pytest.fixture
 def c():
     return C()
+
+
+@pytest.fixture
+def d():
+    return D()
 
 
 @pytest.mark.parametrize('obj', [A(), B()])
@@ -57,3 +69,13 @@ def test_final_set(c):
 def test_nonfinal_set(c):
     c.nonfinal = 1
     assert c.nonfinal == 1
+
+
+def test_class_existing_field(d):
+    d.final = 1
+    assert d.final == 1
+
+
+def test_class_new_field(d):
+    with pytest.raises(TypeError):
+        d.new = 1
