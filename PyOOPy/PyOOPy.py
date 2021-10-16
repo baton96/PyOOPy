@@ -44,9 +44,15 @@ class PyOOPy:
     # Protected, Private, Public
     def __getattribute__(self, name):
         attribute = object.__getattribute__(self, name)
-        caller = sys._getframe().f_back.f_locals.get('self')
         access_check = method_access if callable(attribute) else field_access
         access = access_check(self, name)
+
+        if access == Abstract:
+            for parent in parents(self):
+                if name in parent.__dict__:
+                    raise access_error(name, self, access)
+
+        caller = sys._getframe().f_back.f_locals.get('self')
         if access in (Private, Protected) and caller is not self:
             raise access_error(name, self, access)
         for parent in parents(self):
