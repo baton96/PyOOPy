@@ -15,53 +15,45 @@ class B(PyOOPy):
     nonfinal: int = 0
 
 
-@pytest.fixture
-def a(): return A()
+class C(PyOOPy):
+    def final(self) -> Final:
+        pass
+
+    def nonfinal(self):
+        pass
 
 
 @pytest.fixture
-def b(): return B()
+def c():
+    return C()
 
 
-def test_a_final_inc(a):
+@pytest.mark.parametrize('obj', [A(), B()])
+class TestFinal:
+    def test_final_inc(self, obj):
+        with pytest.raises(AttributeError):
+            obj.final += 1
+
+    def test_final_set(self, obj):
+        with pytest.raises(AttributeError):
+            obj.final = 1
+
+    def test_nonfinal_inc(self, obj):
+        before = obj.nonfinal
+        obj.nonfinal += 1
+        after = obj.nonfinal
+        assert after == before + 1
+
+    def test_nonfinal_set(self, obj):
+        obj.nonfinal = 1
+        assert obj.nonfinal == 1
+
+
+def test_final_set(c):
     with pytest.raises(AttributeError):
-        a.final += 1
+        c.final = 1
 
 
-def test_a_final_set(a):
-    with pytest.raises(AttributeError):
-        a.final = 1
-
-
-def test_a_nonfinal_inc(a):
-    before = a.nonfinal
-    a.nonfinal += 1
-    after = a.nonfinal
-    assert after == before + 1
-
-
-def test_a_nonfinal_set(a):
-    a.nonfinal = 1
-    assert a.nonfinal == 1
-
-
-def test_b_final_inc(b):
-    with pytest.raises(AttributeError):
-        b.final += 1
-
-
-def test_b_final_set(b):
-    with pytest.raises(AttributeError):
-        b.final = 1
-
-
-def test_b_nonfinal_inc(b):
-    before = b.nonfinal
-    b.nonfinal += 1
-    after = b.nonfinal
-    assert after == before + 1
-
-
-def test_b_nonfinal_set(b):
-    b.nonfinal = 1
-    assert b.nonfinal == 1
+def test_nonfinal_set(c):
+    c.nonfinal = 1
+    assert c.nonfinal == 1

@@ -31,7 +31,10 @@ class Class(PyOOPy):
 from PyOOPy import PyOOPy, Final
 
 class Class(PyOOPy):
-    final: Final = 'final'
+    final_field: Final = 'final_field'
+
+    def final_method(self) -> Final:
+        return 'final_method'
 ```
 ### Abstract
 ```python

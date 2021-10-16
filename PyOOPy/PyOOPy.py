@@ -80,10 +80,13 @@ class PyOOPy:
 
     # Final
     def __setattr__(self, attr, value):
-        is_final = self.__init__.__annotations__.get(attr) == Final
         caller = sys._getframe().f_back.f_code.co_name
         from_init = (caller == '__init__')
-        if is_final and not from_init:
-            msg = f"Attribute '{attr}' of object '{self.__class__.__name__}' is final"
-            raise AttributeError(msg)
+        if not from_init:
+            is_callable = callable(self.__getattribute__(attr))
+            access_check = method_access if is_callable else field_access
+            access = access_check(self, attr)
+            if access == Final:
+                msg = f"Attribute '{attr}' of object '{self.__class__.__name__}' is final"
+                raise AttributeError(msg)
         object.__setattr__(self, attr, value)
