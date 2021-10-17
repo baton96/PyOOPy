@@ -27,19 +27,19 @@ def child(): return Child()
 def base(): return Base()
 
 
-def base_field(base):
+def test_base_field(base):
     with pytest.raises(AttributeError):
         _ = base.field
 
 
-def base_method(base):
+def test_base_method(base):
     with pytest.raises(AttributeError):
         base.method()
 
 
-def child_field(child):
+def test_child_field(child):
     assert 'success' == child.field
 
 
-def child_method(child):
+def test_child_method(child):
     assert 'success' == child.method()

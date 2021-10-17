@@ -52,8 +52,13 @@ class PyOOPy:
 
         if access == Abstract:
             for parent in parents(self):
-                if name in parent.__dict__:
-                    raise access_error(name, self, access)
+                if parent == PyOOPy:
+                    continue
+                parent_access = access_check(parent(), name)
+                if parent_access is Abstract:
+                    break
+            else:
+                raise access_error(name, self, access)
 
         caller = inspect.currentframe().f_back.f_locals.get('self')
         if access in (Private, Protected) and caller is not self:
@@ -62,7 +67,7 @@ class PyOOPy:
             if parent == PyOOPy:
                 continue
             access = access_check(parent(), name)
-            if parent != object and access is Private:
+            if access is Private:
                 raise access_error(name, self, access)
         return attribute
 
