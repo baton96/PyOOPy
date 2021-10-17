@@ -1,5 +1,7 @@
-from keywords import *
+import inspect
 import sys
+
+from keywords import *
 
 
 def method_access(obj, name):
@@ -41,7 +43,8 @@ def access_error(name, cls, access):
 
 
 class PyOOPy:
-    # Protected, Private, Public
+    _abstract = True
+
     def __getattribute__(self, name):
         attribute = object.__getattribute__(self, name)
         access_check = method_access if callable(attribute) else field_access
@@ -52,7 +55,7 @@ class PyOOPy:
                 if name in parent.__dict__:
                     raise access_error(name, self, access)
 
-        caller = sys._getframe().f_back.f_locals.get('self')
+        caller = inspect.currentframe().f_back.f_locals.get('self')
         if access in (Private, Protected) and caller is not self:
             raise access_error(name, self, access)
         for parent in parents(self):
@@ -63,30 +66,47 @@ class PyOOPy:
                 raise access_error(name, self, access)
         return attribute
 
-    # Abstract
-    _abstract = True
-
     def __init_subclass__(cls):
+        try:
+            annotations = cls.__init__.__annotations__
+        except AttributeError:
+            annotations = {}
+        return_type = annotations.get('return')
+
+        # Abstract class
         init = cls.__init__.__qualname__
         own_init = init.startswith(cls.__name__)
-        try:
-            return_type = cls.__init__.__annotations__.get('return')
-        except AttributeError:
-            return_type = None
-        is_abstract = (return_type == Abstract)
-        if own_init and is_abstract:
+        if own_init and return_type == Abstract:
             cls._abstract = True
         else:
             cls._abstract = None
+
+        # General case
+        if not return_type:
+            return
+
+        if not hasattr(cls, '__annotations__'):
+            cls.__annotations__ = {}
+
+        arg_names = inspect.getfullargspec(cls.__init__).args[1:]
+        for name in arg_names:
+            annotations.setdefault(name, return_type)
+
+        attribute_names = [attribute for attribute in cls.__dict__.keys() if attribute[0] != '_']
+        for name in attribute_names:
+            attribute = object.__getattribute__(cls, name)
+            if callable(attribute):
+                attribute.__annotations__.setdefault('return', return_type)
+            else:
+                cls.__annotations__.setdefault(name, return_type)
 
     def __new__(cls):
         if cls._abstract:
             raise TypeError(f"Can't instantiate abstract class {cls.__name__}")
         return object.__new__(cls)
 
-    # Final
     def __setattr__(self, name, value):
-        caller = sys._getframe().f_back.f_code.co_name
+        caller = inspect.currentframe().f_back.f_code.co_name
         from_init = (caller == '__init__')
         if not from_init:
             if name in dir(self):

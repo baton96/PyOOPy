@@ -25,6 +25,7 @@ class C(PyOOPy):
 
 class D(PyOOPy):
     final = 0
+    nonfinal: int = 0
 
     def __init__(self) -> Final:
         pass
@@ -71,9 +72,14 @@ def test_nonfinal_set(c):
     assert c.nonfinal == 1
 
 
-def test_class_existing_field(d):
-    d.final = 1
-    assert d.final == 1
+def test_class_final_field(d):
+    with pytest.raises(AttributeError):
+        d.final = 1
+
+
+def test_class_nonfinal_field(c):
+    d.nonfinal = 1
+    assert d.nonfinal == 1
 
 
 def test_class_new_field(d):
