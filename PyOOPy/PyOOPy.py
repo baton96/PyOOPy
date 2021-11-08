@@ -1,5 +1,4 @@
 import inspect
-import sys
 
 from keywords import *
 
@@ -126,7 +125,7 @@ class PyOOPy:
                     cls_access = self.__init__.__annotations__.get('return')
                 except AttributeError:
                     cls_access = None
-                if name not in self.__dict__ and cls_access == Final:
+                if cls_access == Final:
                     msg = f"Class '{self.__class__.__name__}' is final"
                     raise TypeError(msg)
         object.__setattr__(self, name, value)
