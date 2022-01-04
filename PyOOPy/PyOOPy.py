@@ -73,42 +73,42 @@ class PyOOPy(type):
                 init_annotations = decorated_class.__init__.__annotations__
             except AttributeError:
                 init_annotations = {}
-            return_type = init_annotations.get('return')
+            return_annotation = init_annotations.get('return')
 
             # Abstract class
             init = decorated_class.__init__.__qualname__
             own_init = init.startswith(decorated_class.__name__)
-            if own_init and return_type == Abstract:
+            if own_init and return_annotation == Abstract:
                 decorated_class._abstract = True
             else:
                 decorated_class._abstract = None
 
         cls.__init_subclass__ = classmethod(__init_subclass__)
 
-        def __getattribute__(self, name):
-            attribute = object.__getattribute__(self, name)
+        def __getattribute__(self, attr_name):
+            attribute = object.__getattribute__(self, attr_name)
             access_check = method_access if callable(attribute) else field_access
-            access = access_check(self, name)
+            access = access_check(self, attr_name)
 
             if access == Abstract:
                 for parent in parents(self):
                     if parent == PyOOPy:
                         continue
-                    parent_access = access_check(parent(), name)
+                    parent_access = access_check(parent(), attr_name)
                     if parent_access is Abstract:
                         break
                 else:
-                    raise access_error(name, self, access)
+                    raise access_error(attr_name, self, access)
 
             caller = inspect.currentframe().f_back.f_locals.get('self')
             if access in (Private, Protected) and caller is not self:
-                raise access_error(name, self, access)
+                raise access_error(attr_name, self, access)
             for parent in parents(self):
                 if parent == PyOOPy:
                     continue
-                access = access_check(parent(), name)
+                access = access_check(parent(), attr_name)
                 if access is Private:
-                    raise access_error(name, self, access)
+                    raise access_error(attr_name, self, access)
             return attribute
 
         cls.__getattribute__ = __getattribute__
@@ -120,16 +120,16 @@ class PyOOPy(type):
 
         cls.__new__ = __new__
 
-        def __setattr__(self, name, value):
+        def __setattr__(self, attr_name, value):
             caller = inspect.currentframe().f_back.f_code.co_name
             from_init = (caller == '__init__')
             if not from_init:
-                if name in dir(self):
-                    attribute = object.__getattribute__(self, name)
+                if attr_name in dir(self):
+                    attribute = object.__getattribute__(self, attr_name)
                     access_check = method_access if callable(attribute) else field_access
-                    access = access_check(self, name)
+                    access = access_check(self, attr_name)
                     if access == Final:
-                        msg = f"Attribute '{name}' of object '{self.__class__.__name__}' is final"
+                        msg = f"Attribute '{attr_name}' of object '{self.__class__.__name__}' is final"
                         raise AttributeError(msg)
                 else:
                     try:
@@ -139,6 +139,6 @@ class PyOOPy(type):
                     if cls_access == Final:
                         msg = f"Class '{self.__class__.__name__}' is final"
                         raise TypeError(msg)
-            object.__setattr__(self, name, value)
+            object.__setattr__(self, attr_name, value)
 
         cls.__setattr__ = __setattr__
