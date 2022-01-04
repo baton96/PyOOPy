@@ -7,45 +7,41 @@ Abstract = type('Abstract', (), {})
 Final = type('Final', (), {})
 
 
-def method_access(obj, name):
-    try:
-        method = object.__getattribute__(obj, name)
-        annotations = method.__annotations__
-        access = annotations.get('return')
-        return access
-    except AttributeError:
-        return
-
-
-def field_access(obj, name):
-    try:
-        cls_annotations = object.__getattribute__(obj, '__annotations__')
-    except AttributeError:
-        cls_annotations = {}
-
-    try:
-        init = object.__getattribute__(obj, '__init__')
-        obj_annotations = init.__annotations__
-    except AttributeError:
-        obj_annotations = {}
-
-    annotations = {**obj_annotations, **cls_annotations}
-    access = annotations.get(name)
-    return access
-
-
-def parents(obj):
-    cls = object.__getattribute__(obj, '__class__')
-    bases = cls.__bases__
-    return bases
-
-
-def access_error(name, cls, access):
-    msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__name__.lower()}"
-    return AttributeError(msg)
-
-
 class PyOOPy(type):
+    def method_access(self, obj, name):
+        try:
+            method = object.__getattribute__(obj, name)
+            annotations = method.__annotations__
+            access = annotations.get('return')
+            return access
+        except AttributeError:
+            return
+
+    def field_access(self, obj, name):
+        try:
+            cls_annotations = object.__getattribute__(obj, '__annotations__')
+        except AttributeError:
+            cls_annotations = {}
+
+        try:
+            init = object.__getattribute__(obj, '__init__')
+            obj_annotations = init.__annotations__
+        except AttributeError:
+            obj_annotations = {}
+
+        annotations = {**obj_annotations, **cls_annotations}
+        access = annotations.get(name)
+        return access
+
+    def parents(self, obj):
+        cls = object.__getattribute__(obj, '__class__')
+        bases = cls.__bases__
+        return bases
+
+    def access_error(self, name, cls, access):
+        msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__name__.lower()}"
+        return AttributeError(msg)
+
     def __init__(cls, what, bases, attr_dict):
         super().__init__(what, bases, attr_dict)
 
@@ -91,24 +87,24 @@ class PyOOPy(type):
 
         def __getattribute__(self, attr_name):
             attribute = object.__getattribute__(self, attr_name)
-            access_check = method_access if callable(attribute) else field_access
-            access = access_check(self, attr_name)
+            access_check = PyOOPy.method_access if callable(attribute) else PyOOPy.field_access
+            access = access_check(None, self, attr_name)
 
             if access == Abstract:
-                for parent in parents(self):
-                    parent_access = access_check(parent(), attr_name)
+                for parent in PyOOPy.parents(None, self):
+                    parent_access = access_check(None, parent(), attr_name)
                     if parent_access == Abstract:
                         break
                 else:
-                    raise access_error(attr_name, self, access)
+                    raise PyOOPy.access_error(None, attr_name, self, access)
 
             caller = inspect.currentframe().f_back.f_locals.get('self')
             if access in (Private, Protected) and caller is not self:
-                raise access_error(attr_name, self, access)
-            for parent in parents(self):
-                access = access_check(parent(), attr_name)
+                raise PyOOPy.access_error(None, attr_name, self, access)
+            for parent in PyOOPy.parents(None, self):
+                access = access_check(None, parent(), attr_name)
                 if access == Private:
-                    raise access_error(attr_name, self, access)
+                    raise PyOOPy.access_error(None, attr_name, self, access)
             return attribute
 
         cls.__getattribute__ = __getattribute__
@@ -126,8 +122,8 @@ class PyOOPy(type):
             if not from_init:
                 if attr_name in dir(self):
                     attribute = object.__getattribute__(self, attr_name)
-                    access_check = method_access if callable(attribute) else field_access
-                    access = access_check(self, attr_name)
+                    access_check = PyOOPy.method_access if callable(attribute) else PyOOPy.field_access
+                    access = access_check(None, self, attr_name)
                     if access == Final:
                         msg = f"Attribute '{attr_name}' of object '{self.__class__.__name__}' is final"
                         raise AttributeError(msg)
