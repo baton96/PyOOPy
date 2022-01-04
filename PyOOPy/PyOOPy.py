@@ -1,6 +1,10 @@
 import inspect
 
-from keywords import *
+Protected = type('Protected', (), {})
+Private = type('Private', (), {})
+Public = type('Public', (), {})
+Abstract = type('Abstract', (), {})
+Final = type('Final', (), {})
 
 
 def method_access(obj, name):
