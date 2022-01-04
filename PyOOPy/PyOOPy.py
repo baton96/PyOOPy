@@ -56,7 +56,7 @@ class PyOOPy(type):
         return_type = annotations.get('return')
 
         # General case
-        if return_type:
+        if return_type in {Protected, Private, Public, Abstract, Final}:
             if not hasattr(cls, '__annotations__'):
                 cls.__annotations__ = {}
 
@@ -96,10 +96,8 @@ class PyOOPy(type):
 
             if access == Abstract:
                 for parent in parents(self):
-                    if parent == PyOOPy:
-                        continue
                     parent_access = access_check(parent(), attr_name)
-                    if parent_access is Abstract:
+                    if parent_access == Abstract:
                         break
                 else:
                     raise access_error(attr_name, self, access)
@@ -108,19 +106,17 @@ class PyOOPy(type):
             if access in (Private, Protected) and caller is not self:
                 raise access_error(attr_name, self, access)
             for parent in parents(self):
-                if parent == PyOOPy:
-                    continue
                 access = access_check(parent(), attr_name)
-                if access is Private:
+                if access == Private:
                     raise access_error(attr_name, self, access)
             return attribute
 
         cls.__getattribute__ = __getattribute__
 
-        def __new__(cls2):
-            if getattr(cls2, '_abstract', False):
-                raise TypeError(f"Can't instantiate abstract class {cls2.__name__}")
-            return object.__new__(cls2)
+        def __new__(new_cls):
+            if getattr(new_cls, '_abstract', False):
+                raise TypeError(f"Can't instantiate abstract class {new_cls.__name__}")
+            return object.__new__(new_cls)
 
         cls.__new__ = __new__
 
