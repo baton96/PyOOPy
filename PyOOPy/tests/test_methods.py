@@ -4,7 +4,7 @@ import pytest
 
 
 @dataclass
-class Base(PyOOPy):
+class Base(metaclass=PyOOPy):
     def protected_method(self) -> Protected:
         return 'success'
 

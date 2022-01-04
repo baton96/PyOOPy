@@ -2,7 +2,7 @@ from PyOOPy import PyOOPy, Abstract
 import pytest
 
 
-class A(PyOOPy):
+class A(metaclass=PyOOPy):
     pass
 
 

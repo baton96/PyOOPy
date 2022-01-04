@@ -3,19 +3,19 @@ from PyOOPy import PyOOPy, Final
 import pytest
 
 
-class A(PyOOPy):
+class A(metaclass=PyOOPy):
     def __init__(self, final: Final = 0, nonfinal: int = 0):
         self.final = final
         self.nonfinal = nonfinal
 
 
 @dataclass
-class B(PyOOPy):
+class B(metaclass=PyOOPy):
     final: Final = 0
     nonfinal: int = 0
 
 
-class C(PyOOPy):
+class C(metaclass=PyOOPy):
     def final(self) -> Final:
         pass
 
@@ -23,7 +23,7 @@ class C(PyOOPy):
         pass
 
 
-class D(PyOOPy):
+class D(metaclass=PyOOPy):
     final = 0
     nonfinal: int = 0
 

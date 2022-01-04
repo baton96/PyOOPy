@@ -4,7 +4,7 @@ import pytest
 
 
 @dataclass
-class Base(PyOOPy):
+class Base(metaclass=PyOOPy):
     field: Abstract = 'success'
 
     def method(self) -> Abstract:

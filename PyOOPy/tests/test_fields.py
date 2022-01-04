@@ -4,7 +4,7 @@ import pytest
 
 
 @dataclass
-class Base(PyOOPy):
+class Base(metaclass=PyOOPy):
     protected_field: Protected = 'success'
     private_field: Private = 'success'
     public_field: Public = 'success'
