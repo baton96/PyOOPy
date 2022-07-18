@@ -5,13 +5,13 @@ import pytest
 
 @dataclass
 class Base(metaclass=PyOOPy):
-    def protected_method(self) -> Protected:
+    def protected_method(self) -> Protected[str]:
         return 'success'
 
-    def private_method(self) -> Private:
+    def private_method(self) -> Private[str]:
         return 'success'
 
-    def public_method(self) -> Public:
+    def public_method(self) -> Public[str]:
         return 'success'
 
     def protected_method_getter(self):

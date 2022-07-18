@@ -1,10 +1,18 @@
 import inspect
+from typing import Iterable, TypeVar
 
-Protected = type('Protected', (), {})
-Private = type('Private', (), {})
-Public = type('Public', (), {})
-Abstract = type('Abstract', (), {})
-Final = type('Final', (), {})
+_Protected = type('Protected', (), {})
+_Private = type('Private', (), {})
+_Public = type('Public', (), {})
+_Abstract = type('Abstract', (), {})
+_Final = type('Final', (), {})
+T = TypeVar('T')
+
+Protected = type(Iterable)(_Protected, T)
+Private = type(Iterable)(_Private, T)
+Public = type(Iterable)(_Public, T)
+Abstract = type(Iterable)(_Abstract, T)
+Final = type(Iterable)(_Final, T)
 
 
 class PyOOPy(type):
@@ -39,7 +47,7 @@ class PyOOPy(type):
         return bases
 
     def access_error(self, name, cls, access):
-        msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__name__.lower()}"
+        msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__origin__.__name__.lower()}"
         return AttributeError(msg)
 
     def __init__(cls, what, bases, attr_dict):
@@ -99,11 +107,14 @@ class PyOOPy(type):
                     raise PyOOPy.access_error(None, attr_name, self, access)
 
             caller = inspect.currentframe().f_back.f_locals.get('self')
-            if access in (Private, Protected) and caller is not self:
+            if (
+                    getattr(access, '__origin__', None) in (Private.__origin__, Protected.__origin__)
+                    and caller is not self
+            ):
                 raise PyOOPy.access_error(None, attr_name, self, access)
             for parent in PyOOPy.parents(None, self):
                 access = access_check(None, parent(), attr_name)
-                if access == Private:
+                if getattr(access, '__origin__', None) == Private.__origin__:
                     raise PyOOPy.access_error(None, attr_name, self, access)
             return attribute
 
