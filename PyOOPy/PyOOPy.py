@@ -135,7 +135,7 @@ class PyOOPy(type):
                     attribute = object.__getattribute__(self, attr_name)
                     access_check = PyOOPy.method_access if callable(attribute) else PyOOPy.field_access
                     access = access_check(None, self, attr_name)
-                    if access == Final:
+                    if getattr(access, '__origin__', None) == Final.__origin__:
                         msg = f"Attribute '{attr_name}' of object '{self.__class__.__name__}' is final"
                         raise AttributeError(msg)
                 else:

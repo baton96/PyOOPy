@@ -4,14 +4,14 @@ import pytest
 
 
 class A(metaclass=PyOOPy):
-    def __init__(self, final: Final = 0, nonfinal: int = 0):
+    def __init__(self, final: Final[int] = 0, nonfinal: int = 0):
         self.final = final
         self.nonfinal = nonfinal
 
 
 @dataclass
 class B(metaclass=PyOOPy):
-    final: Final = 0
+    final: Final[int] = 0
     nonfinal: int = 0
 
 
