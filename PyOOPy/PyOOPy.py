@@ -100,10 +100,10 @@ class PyOOPy(type):
             access_check = PyOOPy.method_access if callable(attribute) else PyOOPy.field_access
             access = access_check(None, self, attr_name)
 
-            if access == Abstract:
+            if getattr(access, '__origin__', None) == Abstract.__origin__:
                 for parent in PyOOPy.parents(None, self):
                     parent_access = access_check(None, parent(), attr_name)
-                    if parent_access == Abstract:
+                    if getattr(parent_access, '__origin__', None) == Abstract.__origin__:
                         break
                 else:
                     raise PyOOPy.access_error(None, attr_name, self, access)

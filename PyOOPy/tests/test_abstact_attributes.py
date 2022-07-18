@@ -5,9 +5,9 @@ import pytest
 
 @dataclass
 class Base(metaclass=PyOOPy):
-    field: Abstract = 'success'
+    field: Abstract[str] = 'success'
 
-    def method(self) -> Abstract:
+    def method(self) -> Abstract[str]:
         return 'success'
 
 
