@@ -47,7 +47,9 @@ class PyOOPy(type):
         return bases
 
     def access_error(self, name, cls, access):
-        msg = f"Attribute '{name}' of object '{cls.__class__.__name__}' is {access.__origin__.__name__.lower()}"
+        class_name = cls.__class__.__name__
+        access_name = access.__origin__.__name__.lower()
+        msg = f"Attribute '{name}' of object '{class_name}' is {access_name}"
         return AttributeError(msg)
 
     def __init__(cls, what, bases, attr_dict):
