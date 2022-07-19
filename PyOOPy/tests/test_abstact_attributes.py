@@ -1,6 +1,8 @@
-from PyOOPy import PyOOPy, Abstract
 from dataclasses import dataclass
+
 import pytest
+
+from PyOOPy import PyOOPy, Abstract
 
 
 @dataclass

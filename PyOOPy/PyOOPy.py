@@ -1,18 +1,12 @@
 import inspect
 from typing import Iterable, TypeVar
 
-_Protected = type('Protected', (), {})
-_Private = type('Private', (), {})
-_Public = type('Public', (), {})
-_Abstract = type('Abstract', (), {})
-_Final = type('Final', (), {})
 T = TypeVar('T')
-
-Protected = type(Iterable)(_Protected, T)
-Private = type(Iterable)(_Private, T)
-Public = type(Iterable)(_Public, T)
-Abstract = type(Iterable)(_Abstract, T)
-Final = type(Iterable)(_Final, T)
+Protected = type(Iterable)(type('Protected', (), {}), T)
+Abstract = type(Iterable)(type('Abstract', (), {}), T)
+Private = type(Iterable)(type('Private', (), {}), T)
+Public = type(Iterable)(type('Public', (), {}), T)
+Final = type(Iterable)(type('Final', (), {}), T)
 
 
 class PyOOPy(type):

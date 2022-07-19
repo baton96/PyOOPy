@@ -1,5 +1,6 @@
-from PyOOPy import PyOOPy, Abstract
 import pytest
+
+from PyOOPy import PyOOPy, Abstract
 
 
 class A(metaclass=PyOOPy):

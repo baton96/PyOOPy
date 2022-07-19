@@ -1,6 +1,8 @@
-from PyOOPy import PyOOPy, Protected, Private, Public
 from dataclasses import dataclass
+
 import pytest
+
+from PyOOPy import PyOOPy, Protected, Private, Public
 
 
 @dataclass

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
-from PyOOPy import PyOOPy, Final
+
 import pytest
+
+from PyOOPy import PyOOPy, Final
 
 
 class A(metaclass=PyOOPy):
