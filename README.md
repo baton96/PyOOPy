@@ -10,12 +10,12 @@
 from PyOOPy import PyOOPy, Private
 
 class Class(metaclass=PyOOPy):
-    private_class_field: Private = 'private_class_field'
+    private_class_field: Private[str] = 'private_class_field'
     
     def __init__(self, private_obj_field: Private):
         self.private_obj_field = private_obj_field
 
-    def private_method(self) -> Private:
+    def private_method(self) -> Private[str]:
         return 'private_method'
 
 class PrivateClass(metaclass=PyOOPy):
@@ -28,17 +28,17 @@ class PrivateClass(metaclass=PyOOPy):
 from PyOOPy import PyOOPy, Protected, Private, Public
 
 class Class(metaclass=PyOOPy):
-    protected_field: Protected = 'protected_field'
-    private_field: Private = 'private_field'
-    public_field: Public = 'public_field'
+    protected_field: Protected[str] = 'protected_field'
+    private_field: Private[str] = 'private_field'
+    public_field: Public[str] = 'public_field'
 
-    def protected_method(self) -> Protected:
+    def protected_method(self) -> Protected[str]:
         return 'protected_method'
 
-    def private_method(self) -> Private:
+    def private_method(self) -> Private[str]:
         return 'private_method'
 
-    def public_method(self) -> Public:
+    def public_method(self) -> Public[str]:
         return 'public_method'
 ```
 ### Final
@@ -46,9 +46,9 @@ class Class(metaclass=PyOOPy):
 from PyOOPy import PyOOPy, Final
 
 class Class(metaclass=PyOOPy):
-    final_field: Final = 'final_field'
+    final_field: Final[str] = 'final_field'
 
-    def final_method(self) -> Final:
+    def final_method(self) -> Final[str]:
         return 'final_method'
 ```
 ### Abstract
@@ -59,5 +59,3 @@ class Class(metaclass=PyOOPy):
     def __init__(self) -> Abstract:
         pass
 ```
-## License
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
