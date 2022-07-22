@@ -1,10 +1,5 @@
 # 💩 PyOOPy 💩
-**P**ython **O**bject-**O**riented **P**rogramming library
-
-## Installation
-```pip install PyOOPy```
-
-## Usage
+**P**ython **O**bject-**O**riented **P**rogramming
 ### Example  usage
 ```python
 from PyOOPy import PyOOPy, Private
